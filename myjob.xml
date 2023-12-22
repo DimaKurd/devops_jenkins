@@ -1,0 +1,153 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?><project>
+  <actions/>
+  <description/>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
+        <daysToKeep>-1</daysToKeep>
+        <numToKeep>3</numToKeep>
+        <artifactDaysToKeep>-1</artifactDaysToKeep>
+        <artifactNumToKeep>-1</artifactNumToKeep>
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
+    
+  </properties>
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@5.2.1">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <url>git@github.com:DimaKurd/devops_jenkins.git</url>
+        <credentialsId>github_pull_key</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>*/main</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <submoduleCfg class="empty-list"/>
+    <extensions/>
+  </scm>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <authToken>mytoken</authToken>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>echo "----------Prom Env Build Start----------" 
+echo "This is the new line in my index.html - file" &gt;&gt; index.html 
+echo "----------Prom Env Build End----------"</command>
+      <configuredLocalRules/>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command>chmod 750 ./test.sh
+./test.sh</command>
+      <configuredLocalRules/>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <jenkins.plugins.publish__over__ssh.BapSshPublisherPlugin plugin="publish-over-ssh@1.25">
+      <consolePrefix>SSH: </consolePrefix>
+      <delegate plugin="publish-over@0.22">
+        <publishers>
+          <jenkins.plugins.publish__over__ssh.BapSshPublisher plugin="publish-over-ssh@1.25">
+            <configName>jenkins-apps</configName>
+            <verbose>true</verbose>
+            <transfers>
+              <jenkins.plugins.publish__over__ssh.BapSshTransfer>
+                <remoteDirectory/>
+                <sourceFiles>index.html,favicon.ico</sourceFiles>
+                <excludes/>
+                <removePrefix/>
+                <remoteDirectorySDF>false</remoteDirectorySDF>
+                <flatten>false</flatten>
+                <cleanRemote>false</cleanRemote>
+                <noDefaultExcludes>false</noDefaultExcludes>
+                <makeEmptyDirs>false</makeEmptyDirs>
+                <patternSeparator>[, ]+</patternSeparator>
+                <execCommand>sudo service nginx restart</execCommand>
+                <execTimeout>120000</execTimeout>
+                <usePty>false</usePty>
+                <useAgentForwarding>false</useAgentForwarding>
+                <useSftpForExec>false</useSftpForExec>
+                <keepFilePermissions>false</keepFilePermissions>
+              </jenkins.plugins.publish__over__ssh.BapSshTransfer>
+            </transfers>
+            <useWorkspaceInPromotion>false</useWorkspaceInPromotion>
+            <usePromotionTimestamp>false</usePromotionTimestamp>
+            <credentials class="jenkins.plugins.publish_over_ssh.BapSshCredentials">
+              <secretPassphrase>{AQAAABAAAAAQoIWOfdOslNq+u2H4nGNPdnJ/b7ohOSYZI3krLDpgaFc=}</secretPassphrase>
+              <key>-----BEGIN OPENSSH PRIVATE KEY-----
+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
+QWN0aW9uAQIDBAUG
+-----END OPENSSH PRIVATE KEY-----</key>
+              <keyPath/>
+              <username>dimasik</username>
+            </credentials>
+          </jenkins.plugins.publish__over__ssh.BapSshPublisher>
+        </publishers>
+        <continueOnError>false</continueOnError>
+        <failOnError>false</failOnError>
+        <alwaysPublishFromMaster>false</alwaysPublishFromMaster>
+        <hostConfigurationAccess class="jenkins.plugins.publish_over_ssh.BapSshPublisherPlugin" reference="../.."/>
+      </delegate>
+    </jenkins.plugins.publish__over__ssh.BapSshPublisherPlugin>
+    <hudson.plugins.ws__cleanup.WsCleanup plugin="ws-cleanup@0.45">
+      <patterns class="empty-list"/>
+      <deleteDirs>false</deleteDirs>
+      <skipWhenFailed>false</skipWhenFailed>
+      <cleanWhenSuccess>true</cleanWhenSuccess>
+      <cleanWhenUnstable>true</cleanWhenUnstable>
+      <cleanWhenFailure>true</cleanWhenFailure>
+      <cleanWhenNotBuilt>true</cleanWhenNotBuilt>
+      <cleanWhenAborted>true</cleanWhenAborted>
+      <notFailBuild>false</notFailBuild>
+      <cleanupMatrixParent>false</cleanupMatrixParent>
+      <externalDelete/>
+      <disableDeferredWipeout>false</disableDeferredWipeout>
+    </hudson.plugins.ws__cleanup.WsCleanup>
+  </publishers>
+  <buildWrappers>
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.26"/>
+  </buildWrappers>
+</project>
